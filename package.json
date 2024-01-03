@@ -1,0 +1,23 @@
+{
+  "name": "userscripts",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc && vite build --mode dev",
+    "build": "node ./build.js",
+    "preview": "vite preview",
+    "__old_build": "tsc && vite build --mode prod"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
+    "eslint": "^8.56.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8"
+  },
+  "dependencies": {
+    "@rollup/plugin-terser": "^0.4.4"
+  }
+}
