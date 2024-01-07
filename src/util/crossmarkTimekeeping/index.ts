@@ -50,7 +50,7 @@ export function logDayStatus(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
 
 export function isAllowAutoSubmit(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
   return (
-    autoTimekeepingData.currentHighlightedDay <= 6 ||
+    autoTimekeepingData.currentHighlightedDay <= 6 &&
     autoTimekeepingData.currentHighlightedDay !== -1
   );
 }
