@@ -10,6 +10,7 @@
 
 import {
   DAYS_OF_WEEK,
+  addEventListenerForDisable,
   getAutoTimekeepingLocalstorage,
   getDefaultAutoTimekeepingData,
   isAllowAutoSubmit,
@@ -23,6 +24,8 @@ import { AUTO_TIMEKEEPING_DATA_TYPE } from "./util/crossmarkTimekeeping/types";
 function main() {
   const autoTimekeepingData = getAutoTimekeepingLocalstorage();
   logDayStatus(autoTimekeepingData);
+
+  addEventListenerForDisable(autoTimekeepingData);
 
   if (!isAllowAutoSubmit(autoTimekeepingData)) {
     console.warn(`Not allowed to auto submit. Exiting`);

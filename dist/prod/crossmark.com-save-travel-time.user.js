@@ -81,10 +81,19 @@
     }
     return autoTimekeepingData.daysOfTheWeek[autoTimekeepingData.currentHighlightedDay].isTravelTimeCompleted;
   }
+  function addEventListenerForDisable(autoTimekeepingData) {
+    document.addEventListener("keyup", (event) => {
+      if (event.key === "Escape") {
+        autoTimekeepingData.enabled = false;
+        setAutoTimekeepingLocalstorage(autoTimekeepingData);
+      }
+    });
+  }
 
   function main() {
     const autoTimekeepingData = getAutoTimekeepingLocalstorage();
     logDayStatus(autoTimekeepingData);
+    addEventListenerForDisable(autoTimekeepingData);
     if (!isAllowAutoSubmit(autoTimekeepingData) || isTravelTimeCompleted(autoTimekeepingData)) {
       console.warn("Not allowed to auto submit. Exiting");
       return;

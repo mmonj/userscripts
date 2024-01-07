@@ -9,6 +9,7 @@
 // ==/UserScript==
 
 import {
+  addEventListenerForDisable,
   getAutoTimekeepingLocalstorage,
   isAllowAutoSubmit,
   isTravelTimeCompleted,
@@ -21,6 +22,7 @@ import { $node } from "./util/index";
 function main() {
   const autoTimekeepingData = getAutoTimekeepingLocalstorage();
   logDayStatus(autoTimekeepingData);
+  addEventListenerForDisable(autoTimekeepingData);
 
   if (!isAllowAutoSubmit(autoTimekeepingData) || isTravelTimeCompleted(autoTimekeepingData)) {
     console.warn("Not allowed to auto submit. Exiting");

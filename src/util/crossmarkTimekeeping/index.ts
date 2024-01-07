@@ -75,3 +75,12 @@ export function isTimeAcknowledgementCompleted(autoTimekeepingData: AUTO_TIMEKEE
   return autoTimekeepingData.daysOfTheWeek[autoTimekeepingData.currentHighlightedDay]
     .isTimeAcknowledgementCompleted;
 }
+
+export function addEventListenerForDisable(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
+  document.addEventListener("keyup", (event) => {
+    if (event.key === "Escape") {
+      autoTimekeepingData.enabled = false;
+      setAutoTimekeepingLocalstorage(autoTimekeepingData);
+    }
+  });
+}

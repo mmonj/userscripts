@@ -59,11 +59,20 @@
   function isAllowAutoSubmit(autoTimekeepingData) {
     return autoTimekeepingData.enabled;
   }
+  function addEventListenerForDisable(autoTimekeepingData) {
+    document.addEventListener("keyup", (event) => {
+      if (event.key === "Escape") {
+        autoTimekeepingData.enabled = false;
+        setAutoTimekeepingLocalstorage(autoTimekeepingData);
+      }
+    });
+  }
 
   const DROPDOWN_NODES = document.querySelectorAll('summary[data-bs-toggle="tooltip"]');
   function main() {
     const autoTimekeepingData = getAutoTimekeepingLocalstorage();
     logDayStatus(autoTimekeepingData);
+    addEventListenerForDisable(autoTimekeepingData);
     if (!isAllowAutoSubmit(autoTimekeepingData)) {
       console.warn("Not allowed to submit. Exiting.");
       return;

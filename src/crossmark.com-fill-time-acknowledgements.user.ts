@@ -10,6 +10,7 @@
 
 import { $node } from "./util";
 import {
+  addEventListenerForDisable,
   getAutoTimekeepingLocalstorage,
   isAllowAutoSubmit,
   logDayStatus,
@@ -22,6 +23,7 @@ const DROPDOWN_NODES = document.querySelectorAll<HTMLElement>('summary[data-bs-t
 function main() {
   const autoTimekeepingData = getAutoTimekeepingLocalstorage();
   logDayStatus(autoTimekeepingData);
+  addEventListenerForDisable(autoTimekeepingData);
 
   if (!isAllowAutoSubmit(autoTimekeepingData)) {
     console.warn("Not allowed to submit. Exiting.");
