@@ -29,10 +29,11 @@ export function setAutoTimekeepingLocalstorage(data: AUTO_TIMEKEEPING_DATA_TYPE)
   localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(data));
 }
 
-export function getDefaultAutoTimekeepingData() {
+export function getDefaultAutoTimekeepingData(): AUTO_TIMEKEEPING_DATA_TYPE {
   return {
     currentHighlightedDay: -1,
     daysOfTheWeek: structuredClone(DAYS_OF_WEEK),
+    enabled: true,
   };
 }
 
@@ -45,14 +46,15 @@ export function markTravelTimeCompleted(autoTimekeepingData: AUTO_TIMEKEEPING_DA
 export function logDayStatus(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
   const day = autoTimekeepingData.daysOfTheWeek[autoTimekeepingData.currentHighlightedDay];
   console.log(`Day (${autoTimekeepingData.currentHighlightedDay}) status:`);
+  if (autoTimekeepingData.currentHighlightedDay === -1) {
+    console.log("Undefined Day data for day -1");
+    return;
+  }
   console.log(day);
 }
 
 export function isAllowAutoSubmit(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
-  return (
-    autoTimekeepingData.currentHighlightedDay <= 6 &&
-    autoTimekeepingData.currentHighlightedDay !== -1
-  );
+  return autoTimekeepingData.enabled;
 }
 
 export function isTravelTimeCompleted(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {

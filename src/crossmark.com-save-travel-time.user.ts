@@ -24,6 +24,11 @@ function main() {
 
   if (!isAllowAutoSubmit(autoTimekeepingData) || isTravelTimeCompleted(autoTimekeepingData)) {
     console.warn("Not allowed to auto submit. Exiting");
+    return;
+  }
+
+  if (isTravelTimeCompleted(autoTimekeepingData)) {
+    console.warn("Travel time is completed. Navigating back");
     returnHome();
     return;
   }

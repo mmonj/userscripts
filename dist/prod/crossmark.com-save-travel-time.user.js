@@ -52,7 +52,8 @@
   function getDefaultAutoTimekeepingData() {
     return {
       currentHighlightedDay: -1,
-      daysOfTheWeek: structuredClone(DAYS_OF_WEEK)
+      daysOfTheWeek: structuredClone(DAYS_OF_WEEK),
+      enabled: true
     };
   }
   function markTravelTimeCompleted(autoTimekeepingData) {
@@ -63,10 +64,14 @@
   function logDayStatus(autoTimekeepingData) {
     const day = autoTimekeepingData.daysOfTheWeek[autoTimekeepingData.currentHighlightedDay];
     console.log(`Day (${autoTimekeepingData.currentHighlightedDay}) status:`);
+    if (autoTimekeepingData.currentHighlightedDay === -1) {
+      console.log("Undefined Day data for day -1");
+      return;
+    }
     console.log(day);
   }
   function isAllowAutoSubmit(autoTimekeepingData) {
-    return autoTimekeepingData.currentHighlightedDay <= 6 && autoTimekeepingData.currentHighlightedDay !== -1;
+    return autoTimekeepingData.enabled;
   }
   function isTravelTimeCompleted(autoTimekeepingData) {
     const dayWorkTimeInfoNode = $byText("div[class^='col']", "Working Time")?.nextElementSibling;
@@ -82,6 +87,10 @@
     logDayStatus(autoTimekeepingData);
     if (!isAllowAutoSubmit(autoTimekeepingData) || isTravelTimeCompleted(autoTimekeepingData)) {
       console.warn("Not allowed to auto submit. Exiting");
+      return;
+    }
+    if (isTravelTimeCompleted(autoTimekeepingData)) {
+      console.warn("Travel time is completed. Navigating back");
       returnHome();
       return;
     }

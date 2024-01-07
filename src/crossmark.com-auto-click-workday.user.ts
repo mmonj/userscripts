@@ -61,6 +61,8 @@ function clickTimeAcknowledgement() {
 function clickOnDay(newDayNumber: number, autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
   if (newDayNumber > 6) {
     console.warn("No day past 6 available. Returning.");
+    autoTimekeepingData.enabled = false;
+    setAutoTimekeepingLocalstorage(autoTimekeepingData);
     return;
   }
 

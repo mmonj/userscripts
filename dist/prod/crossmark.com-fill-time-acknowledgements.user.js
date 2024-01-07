@@ -43,16 +43,21 @@
   function getDefaultAutoTimekeepingData() {
     return {
       currentHighlightedDay: -1,
-      daysOfTheWeek: structuredClone(DAYS_OF_WEEK)
+      daysOfTheWeek: structuredClone(DAYS_OF_WEEK),
+      enabled: true
     };
   }
   function logDayStatus(autoTimekeepingData) {
     const day = autoTimekeepingData.daysOfTheWeek[autoTimekeepingData.currentHighlightedDay];
     console.log(`Day (${autoTimekeepingData.currentHighlightedDay}) status:`);
+    if (autoTimekeepingData.currentHighlightedDay === -1) {
+      console.log("Undefined Day data for day -1");
+      return;
+    }
     console.log(day);
   }
   function isAllowAutoSubmit(autoTimekeepingData) {
-    return autoTimekeepingData.currentHighlightedDay <= 6 && autoTimekeepingData.currentHighlightedDay !== -1;
+    return autoTimekeepingData.enabled;
   }
 
   const DROPDOWN_NODES = document.querySelectorAll('summary[data-bs-toggle="tooltip"]');
