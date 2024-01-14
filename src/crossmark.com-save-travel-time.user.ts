@@ -24,7 +24,7 @@ function main() {
   logDayStatus(autoTimekeepingData);
   addEventListenerForDisable(autoTimekeepingData);
 
-  if (!isAllowAutoSubmit(autoTimekeepingData) || isTravelTimeCompleted(autoTimekeepingData)) {
+  if (!isAllowAutoSubmit(autoTimekeepingData)) {
     console.warn("Not allowed to auto submit. Exiting");
     return;
   }
