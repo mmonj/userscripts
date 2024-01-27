@@ -13,10 +13,8 @@
   factory();
 })((function () { 'use strict';
 
-  function $node(selector) {
-    return document.querySelector(selector);
-  }
-  function $byText(selector, innerText) {
+  const $node = document.querySelector;
+  function $nodeByText(selector, innerText) {
     const nodes = document.querySelectorAll(selector);
     for (const node of nodes) {
       if (node.innerText === innerText) {
@@ -74,7 +72,7 @@
     return autoTimekeepingData.enabled;
   }
   function isTravelTimeCompleted(autoTimekeepingData) {
-    const dayWorkTimeInfoNode = $byText("div[class^='col']", "Working Time")?.nextElementSibling;
+    const dayWorkTimeInfoNode = $nodeByText("div[class^='col']", "Working Time")?.nextElementSibling;
     if ((dayWorkTimeInfoNode?.innerText ?? "") === "0 minutes") {
       markTravelTimeCompleted(autoTimekeepingData);
       return true;
