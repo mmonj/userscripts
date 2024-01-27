@@ -1,5 +1,8 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
+
+// ts file names that end with this string will be targeted for transpilation/bundling
+const ENTRYPOINT_IDENTIFIER = ".user.ts";
 
 /**
  *
@@ -7,21 +10,14 @@ import path from "path";
  * @returns {string[]}
  */
 export function getUserscriptPaths(directoryPath) {
-  // Initialize an empty list to store the user files
   /**@type {string[]} */
   const userscriptsFilePaths = [];
 
-  // Read the contents of the directory
   const files = fs.readdirSync(directoryPath);
 
-  // Iterate through the files
   files.forEach((file) => {
-    // Check if the file ends with 'user.ts'
-    if (file.endsWith("user.ts")) {
-      // Construct the full path of the file
+    if (file.endsWith(ENTRYPOINT_IDENTIFIER)) {
       const filePath = path.join(directoryPath, file);
-
-      // Add the file path to the user list
       userscriptsFilePaths.push(filePath);
     }
   });
@@ -30,7 +26,7 @@ export function getUserscriptPaths(directoryPath) {
 }
 
 /**
- *
+ * Retain comments included at the top of the file (series of // comments). Useful for *monkey userscripts
  * @param {string} tsFilePath
  * @returns {string[]}
  */
@@ -38,14 +34,11 @@ export function parseInitialComments(tsFilePath) {
   /**@type {string[]} */
   const commentsList = [];
 
-  // Read the content of the file
-  const content = fs.readFileSync(tsFilePath, "utf-8");
+  const content = fs.readFileSync(tsFilePath, "utf8");
 
-  // Split the content into lines and check for comments
   const lines = content.split("\n");
   for (const line of lines) {
-    // Check if the line is a JavaScript comment
-    if (line.trim().startsWith("//") || line.trim().startsWith("/*")) {
+    if (line.trim().startsWith("//")) {
       commentsList.push(line.trim());
     } else {
       return commentsList;
@@ -55,8 +48,6 @@ export function parseInitialComments(tsFilePath) {
   return commentsList;
 }
 
-// Function to prepend comments to user.js files
-
 /**
  *
  * @param {string} jsFilePath
@@ -64,11 +55,15 @@ export function parseInitialComments(tsFilePath) {
  * @returns {void}
  */
 export function prependCommentsToJsFiles(jsFilePath, comments) {
+  if (comments.length === 0) {
+    return;
+  }
+
   try {
-    const jsFileContent = fs.readFileSync(jsFilePath, "utf-8");
+    const jsFileContent = fs.readFileSync(jsFilePath, "utf8");
     const newContent = comments.join("\n") + "\n\n" + jsFileContent;
 
-    fs.writeFileSync(jsFilePath, newContent, "utf-8");
+    fs.writeFileSync(jsFilePath, newContent, "utf8");
     console.log(`Comments prepended to ${jsFilePath} successfully.`);
   } catch (error) {
     console.error(`Error writing to file: ${jsFilePath}`);
@@ -78,24 +73,26 @@ export function prependCommentsToJsFiles(jsFilePath, comments) {
 
 /**
  *
- * @param {string} tsFilePath
- * @returns {string}
- */
-export function getCorrespondingJsFile(tsFilePath) {
-  return path.basename(tsFilePath).replace(/\.ts$/, ".js");
-}
-
-/**
- *
  * @param {string} inputString
+ * @param {string} prefix
  * @returns {string}
  */
-export function slugifyAndCapitalize(inputString) {
+export function slugifyAndCapitalize(inputString, prefix) {
   if (inputString.length === 0) {
     throw new Error("The input string is length 0");
   }
 
-  const slugifiedString = inputString.replace(/[^a-zA-Z]+/g, "_");
+  const prefixRegex = /^\w*$/g;
+  if (!prefixRegex.test(prefix)) {
+    throw new Error("Prefix can only contain alphanumeric characters");
+  }
 
-  return `__MM_${slugifiedString}__`.toUpperCase();
+  let dunderPrefix = "";
+  if (prefix.length > 0) {
+    dunderPrefix = `__${prefix}_`;
+  }
+
+  const slugifiedString = inputString.replaceAll(/[^A-Za-z]+/g, "_");
+
+  return `${dunderPrefix}${slugifiedString}__`.toUpperCase();
 }

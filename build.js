@@ -1,8 +1,7 @@
-import path from "path";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { build } from "vite";
 import {
-  getCorrespondingJsFile,
   getUserscriptPaths,
   parseInitialComments,
   prependCommentsToJsFiles,
@@ -15,10 +14,9 @@ import {
  * @param {string} buildDir
  * @param {string} jsOutputName
  */
-async function buildLibrary(inFile, buildDir, jsOutputName) {
+async function buildBundle(inFile, buildDir, jsOutputName) {
   // Get the current module's file URL
   const currentFileUrl = import.meta.url;
-
   // Convert the file URL to a file path
   const currentFilePath = fileURLToPath(currentFileUrl);
 
@@ -34,7 +32,7 @@ async function buildLibrary(inFile, buildDir, jsOutputName) {
         target: "esnext",
         lib: {
           entry: inFile,
-          name: slugifyAndCapitalize(jsOutputName),
+          name: slugifyAndCapitalize(jsOutputName, "MM"),
           fileName: () => jsOutputName,
           // fileName: (format, entryName) => `${entryName}.js`,
           formats: ["umd"],
@@ -55,9 +53,9 @@ async function buildLibrary(inFile, buildDir, jsOutputName) {
 getUserscriptPaths("./src").forEach(async (tsFilePath) => {
   const buildDir = "./dist/prod";
 
-  const jsOutputName = getCorrespondingJsFile(tsFilePath);
+  const jsOutputName = path.basename(tsFilePath).replace(/\.ts$/, ".js");
   const comments = parseInitialComments(tsFilePath);
-  await buildLibrary(tsFilePath, buildDir, jsOutputName);
+  await buildBundle(tsFilePath, buildDir, jsOutputName);
   setTimeout(() => {
     prependCommentsToJsFiles(path.join(buildDir, jsOutputName), comments);
   }, 500);
