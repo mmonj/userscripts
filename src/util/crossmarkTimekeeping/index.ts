@@ -1,4 +1,4 @@
-import { $byText } from "..";
+import { $nodeByText } from "..";
 import { AUTO_TIMEKEEPING_DATA_TYPE, DAY_OF_WEEK_TYPE } from "./types";
 
 export const LOCALSTORAGE_KEY = "AutoTimekeeping";
@@ -59,7 +59,7 @@ export function isAllowAutoSubmit(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYP
 
 export function isTravelTimeCompleted(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
   // const travelInfo = ($node("a[href='/DTMs/DTM']")!.parentElement!.nextElementSibling! as HTMLElement).innerText;
-  const dayWorkTimeInfoNode = $byText<HTMLElement>("div[class^='col']", "Working Time")
+  const dayWorkTimeInfoNode = $nodeByText<HTMLElement>("div[class^='col']", "Working Time")
     ?.nextElementSibling as HTMLElement | null;
 
   if ((dayWorkTimeInfoNode?.innerText ?? "") === "0 minutes") {

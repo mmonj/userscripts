@@ -1,8 +1,11 @@
-export function $node<T extends HTMLElement = HTMLElement>(selector: string): T | null {
-  return document.querySelector<T>(selector);
-}
+// export function $node<T extends HTMLElement = HTMLElement>(selector: string): T | null {
+//   return document.querySelector<T>(selector);
+// }
 
-export function $byText<T extends HTMLElement = HTMLElement>(
+export const $node: <T extends HTMLElement = HTMLElement>(selector: string) => T | null =
+  document.querySelector;
+
+export function $nodeByText<T extends HTMLElement = HTMLElement>(
   selector: string,
   innerText: string
 ): T | null {
