@@ -66,7 +66,7 @@
     });
   }
 
-  const DROPDOWN_NODES = document.querySelectorAll('summary[data-bs-toggle="tooltip"]');
+  const DROPDOWN_NODES = document.querySelectorAll("summary[data-bs-toggle='tooltip']");
   function main() {
     const autoTimekeepingData = getAutoTimekeepingLocalstorage();
     logDayStatus(autoTimekeepingData);
@@ -77,16 +77,16 @@
     }
     if ($node("#dtlsWorkingTimeCICO").innerText.endsWith("/ 0") && $node("#dtlsWorkingTimeCICO").innerText != "0 / 0") {
       console.log("Filling Working Time");
-      fill_working_time();
+      fillWorkingTime();
     } else if ($node("#dtlsRestMealBreakAck").innerText.trim() == "Pending") {
       console.log("Filling Acknowledge Meal & Break");
-      fill_acknowledgement_rest_meal();
+      fillAcknowledgementRestMeal();
     } else if ($node("#dtlsStartEndTimesAck").innerText.trim() == "Pending") {
       console.log("Filling Acknowledge Start & End Time");
-      fill_acknowledgement_start_end_time();
+      fillAcknowledgementStartEndTime();
     } else if ($node("#dtlsAttestAck").innerText.trim() == "Pending") {
       console.log("Filling Attestation");
-      fill_attestation(autoTimekeepingData);
+      fillAttestation(autoTimekeepingData);
       markTimeAcknowledgementComplete(autoTimekeepingData);
       returnHome();
     } else {
@@ -95,62 +95,62 @@
     }
     logDayStatus(autoTimekeepingData);
   }
-  function fill_working_time() {
+  function fillWorkingTime() {
     DROPDOWN_NODES[0].click();
-    const change_event = new Event("change", { bubbles: true });
-    const total_working_time_mins = parseInt(
-      document.querySelector('summary[data-bs-toggle="tooltip"]').innerText
+    const changeEvent = new Event("change", { bubbles: true });
+    const workWorkTimeMinutes = Number.parseInt(
+      document.querySelector("summary[data-bs-toggle='tooltip']").innerText
     );
-    const add_time_button = document.querySelector("button#btnAddWorkingTimeCICO");
-    add_time_button.click();
-    const start_hours_selection_node = document.querySelector(
-      '[id^="ddlStartTimeHours_WorkingTime"]'
+    const addTimeButton = document.querySelector("button#btnAddWorkingTimeCICO");
+    addTimeButton.click();
+    const startHoursSelectNode = document.querySelector(
+      "[id^='ddlStartTimeHours_WorkingTime']"
     );
-    start_hours_selection_node.value = "09 AM";
-    start_hours_selection_node.dispatchEvent(change_event);
-    const hours_worked = Math.floor(total_working_time_mins / 60);
-    const mins_worked = total_working_time_mins % 60;
-    let day_period = "AM";
-    const start_hour = 9;
-    let final_hours = start_hour + hours_worked;
-    if (final_hours > 12) {
-      final_hours -= 12;
-      day_period = "PM";
+    startHoursSelectNode.value = "09 AM";
+    startHoursSelectNode.dispatchEvent(changeEvent);
+    const hoursWorked = Math.floor(workWorkTimeMinutes / 60);
+    const MinsWorked = workWorkTimeMinutes % 60;
+    let dayPeriod = "AM";
+    const startHour = 9;
+    let finalHours = startHour + hoursWorked;
+    if (finalHours > 12) {
+      finalHours -= 12;
+      dayPeriod = "PM";
     }
-    if (final_hours == 12) {
-      day_period = "PM";
+    if (finalHours == 12) {
+      dayPeriod = "PM";
     }
-    final_hours = final_hours.toString();
-    final_hours = final_hours.padStart(2, "0");
-    final_hours += " " + day_period;
-    let final_mins = mins_worked;
-    final_mins = final_mins.toString();
-    final_mins = final_mins.padStart(2, "0");
-    const end_hours_selection_node = document.querySelector(
-      '[id^="ddlEndTimeHours_WorkingTime"]'
+    finalHours = finalHours.toString();
+    finalHours = finalHours.padStart(2, "0");
+    finalHours += " " + dayPeriod;
+    let finalMins = MinsWorked;
+    finalMins = finalMins.toString();
+    finalMins = finalMins.padStart(2, "0");
+    const endHoursSelectNode = document.querySelector(
+      "[id^='ddlEndTimeHours_WorkingTime']"
     );
-    end_hours_selection_node.value = final_hours;
-    end_hours_selection_node.dispatchEvent(change_event);
-    const end_minutes_selection_node = document.querySelector(
-      '[id^="ddlEndTimeMinutes_WorkingTime"]'
+    endHoursSelectNode.value = finalHours;
+    endHoursSelectNode.dispatchEvent(changeEvent);
+    const endMinutesSelectNode = document.querySelector(
+      "[id^='ddlEndTimeMinutes_WorkingTime']"
     );
-    end_minutes_selection_node.value = final_mins;
-    end_minutes_selection_node.dispatchEvent(change_event);
+    endMinutesSelectNode.value = finalMins;
+    endMinutesSelectNode.dispatchEvent(changeEvent);
     document.querySelector("#btnSaveWorkingTimeCICO").click();
   }
-  function fill_acknowledgement_rest_meal() {
+  function fillAcknowledgementRestMeal() {
     DROPDOWN_NODES[2].click();
     document.querySelector("#radRestBreaksAckYes").click();
     document.querySelector("#radMealBreaksAckYes").click();
     document.querySelector("#btnSaveRestMealBreakAck").click();
   }
-  function fill_acknowledgement_start_end_time() {
+  function fillAcknowledgementStartEndTime() {
     DROPDOWN_NODES[3].click();
     document.querySelector("#chkTimeRecordAckCertify").click();
     document.querySelector("#chkTimeRecordAckAware").click();
     document.querySelector("#btnSaveStartEndTimesAck").click();
   }
-  function fill_attestation(autoTimekeepingData) {
+  function fillAttestation(autoTimekeepingData) {
     if ($node("#dtlsWorkingTimeCICO").innerText === "0 / 0") {
       markTimeAcknowledgementComplete(autoTimekeepingData);
     }

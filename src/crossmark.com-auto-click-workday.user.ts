@@ -73,7 +73,7 @@ function clickOnDay(newDayNumber: number, autoTimekeepingData: AUTO_TIMEKEEPING_
   autoTimekeepingData.currentHighlightedDay = newDayNumber;
 
   setAutoTimekeepingLocalstorage(autoTimekeepingData);
-  console.log(`Clicking on day ${DAYS_OF_WEEK[newDayNumber]}`);
+  console.log(`Clicking on day ${DAYS_OF_WEEK[newDayNumber].name}`);
   dayAnchorNode.click();
 }
 

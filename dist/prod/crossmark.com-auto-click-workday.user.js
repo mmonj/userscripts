@@ -128,7 +128,7 @@
     const dayAnchorNode = document.getElementsByClassName("weekdate")[newDayNumber];
     autoTimekeepingData.currentHighlightedDay = newDayNumber;
     setAutoTimekeepingLocalstorage(autoTimekeepingData);
-    console.log(`Clicking on day ${DAYS_OF_WEEK[newDayNumber]}`);
+    console.log(`Clicking on day ${DAYS_OF_WEEK[newDayNumber].name}`);
     dayAnchorNode.click();
   }
   window.GM_registerMenuCommand("Allow Auto Timekeeping", () => {

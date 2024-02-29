@@ -19,13 +19,13 @@ export function getAutoTimekeepingLocalstorage(): AUTO_TIMEKEEPING_DATA_TYPE {
   if (dataString === null) {
     localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(data));
   } else {
-    data = JSON.parse(dataString);
+    data = JSON.parse(dataString) as AUTO_TIMEKEEPING_DATA_TYPE;
   }
 
   return data;
 }
 
-export function setAutoTimekeepingLocalstorage(data: AUTO_TIMEKEEPING_DATA_TYPE) {
+export function setAutoTimekeepingLocalstorage(data: AUTO_TIMEKEEPING_DATA_TYPE): void {
   localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(data));
 }
 
@@ -37,13 +37,13 @@ export function getDefaultAutoTimekeepingData(): AUTO_TIMEKEEPING_DATA_TYPE {
   };
 }
 
-export function markTravelTimeCompleted(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
+export function markTravelTimeCompleted(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE): void {
   const dayNumber = autoTimekeepingData.currentHighlightedDay;
   autoTimekeepingData.daysOfTheWeek[dayNumber].isTravelTimeCompleted = true;
   setAutoTimekeepingLocalstorage(autoTimekeepingData);
 }
 
-export function logDayStatus(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
+export function logDayStatus(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE): void {
   const day = autoTimekeepingData.daysOfTheWeek[autoTimekeepingData.currentHighlightedDay];
   console.log(`Day (${autoTimekeepingData.currentHighlightedDay}) status:`);
   if (autoTimekeepingData.currentHighlightedDay === -1) {
@@ -53,11 +53,11 @@ export function logDayStatus(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
   console.log(day);
 }
 
-export function isAllowAutoSubmit(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
+export function isAllowAutoSubmit(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE): boolean {
   return autoTimekeepingData.enabled;
 }
 
-export function isTravelTimeCompleted(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
+export function isTravelTimeCompleted(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE): boolean {
   // const travelInfo = ($node("a[href='/DTMs/DTM']")!.parentElement!.nextElementSibling! as HTMLElement).innerText;
   const dayWorkTimeInfoNode = $nodeByText<HTMLElement>("div[class^='col']", "Working Time")
     ?.nextElementSibling as HTMLElement | null;
@@ -71,12 +71,14 @@ export function isTravelTimeCompleted(autoTimekeepingData: AUTO_TIMEKEEPING_DATA
     .isTravelTimeCompleted;
 }
 
-export function isTimeAcknowledgementCompleted(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
+export function isTimeAcknowledgementCompleted(
+  autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE
+): boolean {
   return autoTimekeepingData.daysOfTheWeek[autoTimekeepingData.currentHighlightedDay]
     .isTimeAcknowledgementCompleted;
 }
 
-export function addEventListenerForDisable(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
+export function addEventListenerForDisable(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE): void {
   document.addEventListener("keyup", (event) => {
     if (event.key === "Escape") {
       autoTimekeepingData.enabled = false;

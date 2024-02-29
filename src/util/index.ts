@@ -8,8 +8,9 @@ declare global {
   }
 }
 
-export const $node: <T extends HTMLElement = HTMLElement>(selector: string) => T | null =
-  document.querySelector;
+export function $node<T extends HTMLElement = HTMLElement>(selector: string): T | null {
+  return document.querySelector<T>(selector);
+}
 
 export function $nodeByText<T extends HTMLElement = HTMLElement>(
   selector: string,
