@@ -21,14 +21,14 @@ import {
 } from "./util/crossmarkTimekeeping";
 import { AUTO_TIMEKEEPING_DATA_TYPE } from "./util/crossmarkTimekeeping/types";
 
-function main() {
+function main(): void {
   const autoTimekeepingData = getAutoTimekeepingLocalstorage();
   logDayStatus(autoTimekeepingData);
 
   addEventListenerForDisable(autoTimekeepingData);
 
   if (!isAllowAutoSubmit(autoTimekeepingData)) {
-    console.warn(`Not allowed to auto submit. Exiting`);
+    console.warn("Not allowed to auto submit. Exiting");
     return;
   }
 
@@ -51,17 +51,17 @@ function main() {
   logDayStatus(autoTimekeepingData);
 }
 
-function clickTravelDetails() {
+function clickTravelDetails(): void {
   document.querySelector<HTMLElement>("a[href='/DTMs/DTM']")!.click();
 }
 
-function clickTimeAcknowledgement() {
+function clickTimeAcknowledgement(): void {
   document
     .querySelector<HTMLElement>("a[href='/StartEndTimeAndAcks/StartEndTimeAndAcks']")!
     .click();
 }
 
-function clickOnDay(newDayNumber: number, autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
+function clickOnDay(newDayNumber: number, autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE): void {
   if (newDayNumber > 6) {
     console.warn("No day past 6 available. Returning.");
     autoTimekeepingData.enabled = false;
@@ -77,8 +77,7 @@ function clickOnDay(newDayNumber: number, autoTimekeepingData: AUTO_TIMEKEEPING_
   dayAnchorNode.click();
 }
 
-// @ts-expect-error [function provided globally]
-GM_registerMenuCommand("Allow Auto Timekeeping", () => {
+window.GM_registerMenuCommand("Allow Auto Timekeeping", () => {
   const autoTimekeepingData = getDefaultAutoTimekeepingData();
   setAutoTimekeepingLocalstorage(autoTimekeepingData);
   clickOnDay(0, autoTimekeepingData);

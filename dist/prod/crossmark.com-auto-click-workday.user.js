@@ -95,7 +95,7 @@
     logDayStatus(autoTimekeepingData);
     addEventListenerForDisable(autoTimekeepingData);
     if (!isAllowAutoSubmit(autoTimekeepingData)) {
-      console.warn(`Not allowed to auto submit. Exiting`);
+      console.warn("Not allowed to auto submit. Exiting");
       return;
     }
     if (isTravelTimeCompleted(autoTimekeepingData) && isTimeAcknowledgementCompleted(autoTimekeepingData)) {
@@ -131,7 +131,7 @@
     console.log(`Clicking on day ${DAYS_OF_WEEK[newDayNumber]}`);
     dayAnchorNode.click();
   }
-  GM_registerMenuCommand("Allow Auto Timekeeping", () => {
+  window.GM_registerMenuCommand("Allow Auto Timekeeping", () => {
     const autoTimekeepingData = getDefaultAutoTimekeepingData();
     setAutoTimekeepingLocalstorage(autoTimekeepingData);
     clickOnDay(0, autoTimekeepingData);

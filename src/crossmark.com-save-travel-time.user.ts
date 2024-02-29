@@ -19,7 +19,7 @@ import {
 import { AUTO_TIMEKEEPING_DATA_TYPE } from "./util/crossmarkTimekeeping/types";
 import { $node } from "./util/index";
 
-function main() {
+function main(): void {
   const autoTimekeepingData = getAutoTimekeepingLocalstorage();
   logDayStatus(autoTimekeepingData);
   addEventListenerForDisable(autoTimekeepingData);
@@ -51,22 +51,22 @@ function main() {
   }, 1000);
 }
 
-function getNumberOfVisits() {
+function getNumberOfVisits(): number {
   const tbodyNode = $node("#tblCalcualtedData > tbody")!;
   return tbodyNode.childElementCount - 2;
 }
 
-function clickCalculateTravelTimeBtn() {
+function clickCalculateTravelTimeBtn(): void {
   console.log("Clicked calculate time");
   $node("#CalculateDTM")!.click();
 }
 
-function updateTravelTime() {
+function updateTravelTime(): void {
   console.log("Setting custom travel time");
   const maxTimeMinutes = 59;
 
   const travelTimeNode = $node<HTMLInputElement>("#txtEnteredDriveTime")!;
-  const calculatedTimeMinutes = parseInt(travelTimeNode.value);
+  const calculatedTimeMinutes = Number.parseInt(travelTimeNode.value);
   let customTimeMinutes = Math.floor(calculatedTimeMinutes * 2.3);
 
   if (customTimeMinutes > maxTimeMinutes && calculatedTimeMinutes <= maxTimeMinutes) {
@@ -78,11 +78,11 @@ function updateTravelTime() {
   travelTimeNode.dispatchEvent(new Event("blur", { bubbles: true }));
 }
 
-function returnHome() {
+function returnHome(): void {
   $node("#backHome")!.click();
 }
 
-function initEventListeners(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
+function initEventListeners(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE): void {
   const travelTimeNode = $node("#txtEnteredDriveTime")!;
   const travelTimeReasonSelectNode = $node<HTMLInputElement>("#ddlReasonDriveTime")!;
 
@@ -100,7 +100,7 @@ function initEventListeners(autoTimekeepingData: AUTO_TIMEKEEPING_DATA_TYPE) {
   });
 }
 
-function pressSaveButton() {
+function pressSaveButton(): void {
   const saveBtn = $node("#btnSave")!;
   saveBtn.click();
 }

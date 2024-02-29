@@ -127,7 +127,7 @@
     console.log("Setting custom travel time");
     const maxTimeMinutes = 59;
     const travelTimeNode = $node("#txtEnteredDriveTime");
-    const calculatedTimeMinutes = parseInt(travelTimeNode.value);
+    const calculatedTimeMinutes = Number.parseInt(travelTimeNode.value);
     let customTimeMinutes = Math.floor(calculatedTimeMinutes * 2.3);
     if (customTimeMinutes > maxTimeMinutes && calculatedTimeMinutes <= maxTimeMinutes) {
       customTimeMinutes = maxTimeMinutes;

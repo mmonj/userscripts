@@ -2,6 +2,12 @@
 //   return document.querySelector<T>(selector);
 // }
 
+declare global {
+  interface Window {
+    GM_registerMenuCommand: (title: string, callback: () => void) => void;
+  }
+}
+
 export const $node: <T extends HTMLElement = HTMLElement>(selector: string) => T | null =
   document.querySelector;
 
