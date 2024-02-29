@@ -13,7 +13,9 @@
   factory();
 })((function () { 'use strict';
 
-  const $node = document.querySelector;
+  function $node(selector) {
+    return document.querySelector(selector);
+  }
   function $nodeByText(selector, innerText) {
     const nodes = document.querySelectorAll(selector);
     for (const node of nodes) {

@@ -13,7 +13,9 @@
   factory();
 })((function () { 'use strict';
 
-  const $node = document.querySelector;
+  function $node(selector) {
+    return document.querySelector(selector);
+  }
 
   const LOCALSTORAGE_KEY = "AutoTimekeeping";
   const DAYS_OF_WEEK = [
