@@ -68,9 +68,7 @@ function addToScheduleGrid(courseInfolist: TCourseInfo[]): void {
   }
 
   timeBlocks.forEach((timeBlock) => {
-    const existingLocationNode = timeBlock.querySelector<HTMLSelectElement>(
-      "." + LOCATION_CLASS_NAME
-    );
+    const existingLocationNode = timeBlock.querySelector<HTMLElement>("." + LOCATION_CLASS_NAME);
 
     if (existingLocationNode) {
       console.warn("This timeblock has already had a location added:", existingLocationNode);

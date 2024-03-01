@@ -57,9 +57,7 @@
       alert("No time blocks are currently visible in view");
     }
     timeBlocks.forEach((timeBlock) => {
-      const existingLocationNode = timeBlock.querySelector(
-        "." + LOCATION_CLASS_NAME
-      );
+      const existingLocationNode = timeBlock.querySelector("." + LOCATION_CLASS_NAME);
       if (existingLocationNode) {
         console.warn("This timeblock has already had a location added:", existingLocationNode);
         const truncatedStyle = existingLocationNode.getAttribute("style").replace(animationCssValue, "");

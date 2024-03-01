@@ -1,7 +1,3 @@
-// export function $node<T extends HTMLElement = HTMLElement>(selector: string): T | null {
-//   return document.querySelector<T>(selector);
-// }
-
 export function $node<T extends HTMLElement = HTMLElement>(selector: string): T | null {
   return document.querySelector<T>(selector);
 }
