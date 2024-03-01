@@ -1,0 +1,3 @@
+[submodule "src/__private"]
+	path = src/__private
+	url = git@github.com:mmonj/userscripts-private.git
