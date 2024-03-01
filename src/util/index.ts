@@ -12,6 +12,15 @@ export function $node<T extends HTMLElement = HTMLElement>(selector: string): T 
   return document.querySelector<T>(selector);
 }
 
+export function $safeFind<T extends HTMLElement = HTMLElement>(selector: string): T {
+  const node = document.querySelector<T>(selector);
+  if (node === null) {
+    throw new Error(`Element with selector ${selector} not found`);
+  }
+
+  return node;
+}
+
 export function $nodeByText<T extends HTMLElement = HTMLElement>(
   selector: string,
   innerText: string
