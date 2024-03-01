@@ -5,10 +5,9 @@ const StandardConfig = {
     "sort-imports": ["error", { ignoreDeclarationSort: true }],
     quotes: ["error", "double"],
     semi: ["error", "always"],
-    "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    "no-unused-vars": ["off", { argsIgnorePattern: "^_" }], // typescript handles this
     "no-use-before-define": ["off"],
     camelcase: ["error", { properties: "never", ignoreDestructuring: true }],
-    "no-unused-vars": "off",
   },
 };
 
