@@ -8,6 +8,13 @@ import {
   slugifyAndCapitalize,
 } from "./buildUtil.js";
 
+const CURRENT_FILE_PATH = fileURLToPath(import.meta.url);
+
+const BUILD_DIR = path.join(path.dirname(CURRENT_FILE_PATH), "./dist");
+
+const SRC_SUBPATHS = ["__public", "__private"];
+const GET_GLOB = (srcSubpath) => `./src/${srcSubpath}/**/*.ts`;
+
 /**
  *
  * @param {string} inFile
@@ -15,10 +22,7 @@ import {
  * @param {string} jsOutputName
  */
 async function buildBundle(inFile, buildDir, jsOutputName) {
-  // Get the current module's file URL
-  const currentFileUrl = import.meta.url;
   // Convert the file URL to a file path
-  const currentFilePath = fileURLToPath(currentFileUrl);
 
   try {
     await build({
@@ -40,23 +44,27 @@ async function buildBundle(inFile, buildDir, jsOutputName) {
       },
       resolve: {
         alias: {
-          "@lib": currentFilePath,
+          "@lib": CURRENT_FILE_PATH,
         },
       },
     });
   } catch (error) {
     console.error("Build failed:", error);
+    return;
   }
   console.log("Build successful!");
 }
 
-getUserscriptPaths("./src/**/*.ts").forEach(async (tsFilePath) => {
-  const buildDir = "./dist/prod";
+SRC_SUBPATHS.forEach((srcSubPath) => {
+  const srcGlob = GET_GLOB(srcSubPath);
+  getUserscriptPaths(srcGlob).forEach(async (tsFilePath) => {
+    const jsOutputName = path.basename(tsFilePath).replace(/\.ts$/, ".js");
+    const comments = parseInitialComments(tsFilePath);
 
-  const jsOutputName = path.basename(tsFilePath).replace(/\.ts$/, ".js");
-  const comments = parseInitialComments(tsFilePath);
-  await buildBundle(tsFilePath, buildDir, jsOutputName);
-  setTimeout(() => {
-    prependCommentsToJsFiles(path.join(buildDir, jsOutputName), comments);
-  }, 500);
+    const finalBuildDir = path.join(BUILD_DIR, srcSubPath);
+    await buildBundle(tsFilePath, finalBuildDir, jsOutputName);
+    setTimeout(() => {
+      prependCommentsToJsFiles(path.join(finalBuildDir, jsOutputName), comments);
+    }, 500);
+  });
 });

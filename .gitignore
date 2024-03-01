@@ -22,4 +22,4 @@ dist-ssr
 *.sln
 *.sw?
 vite.svg
-*._p.user.js
+dist/__private/
