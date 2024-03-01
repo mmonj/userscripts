@@ -1,1 +1,7 @@
-export type hellothere = "h" | "a";
+declare global {
+  interface Window {
+    GM_registerMenuCommand: (title: string, callback: () => void) => void;
+  }
+}
+
+export {};

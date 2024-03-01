@@ -50,7 +50,7 @@ async function buildBundle(inFile, buildDir, jsOutputName) {
   console.log("Build successful!");
 }
 
-getUserscriptPaths("./src").forEach(async (tsFilePath) => {
+getUserscriptPaths("./src/**/*.ts").forEach(async (tsFilePath) => {
   const buildDir = "./dist/prod";
 
   const jsOutputName = path.basename(tsFilePath).replace(/\.ts$/, ".js");

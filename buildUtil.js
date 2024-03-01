@@ -1,24 +1,23 @@
+import fg from "fast-glob";
 import fs from "node:fs";
-import path from "node:path";
 
 // ts file names that end with this string will be targeted for transpilation/bundling
 const ENTRYPOINT_IDENTIFIER = ".user.ts";
 
 /**
  *
- * @param {string} directoryPath
+ * @param {string} rootDirPathGlob
  * @returns {string[]}
  */
-export function getUserscriptPaths(directoryPath) {
+export function getUserscriptPaths(rootDirPathGlob) {
   /**@type {string[]} */
   const userscriptsFilePaths = [];
 
-  const files = fs.readdirSync(directoryPath);
+  const files = fg.sync([rootDirPathGlob]);
 
   files.forEach((file) => {
     if (file.endsWith(ENTRYPOINT_IDENTIFIER)) {
-      const filePath = path.join(directoryPath, file);
-      userscriptsFilePaths.push(filePath);
+      userscriptsFilePaths.push(file);
     }
   });
 
