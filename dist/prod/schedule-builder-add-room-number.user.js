@@ -50,14 +50,23 @@
     };
   }
   function addToScheduleGrid(courseInfolist) {
+    const animationCssValue = " animation: pulse 600ms cubic-bezier(0,0,.2,1) forwards;";
     const timeBlocks = document.querySelectorAll(".weekTimes > .time_block");
     if (timeBlocks.length === 0) {
       console.warn("No time blocks are currently visible in view");
       alert("No time blocks are currently visible in view");
     }
     timeBlocks.forEach((timeBlock) => {
-      if (timeBlock.getElementsByClassName(LOCATION_CLASS_NAME).length > 0) {
-        console.warn("This timeblock has already had a location added:", timeBlock);
+      const existingLocationNode = timeBlock.querySelector(
+        "." + LOCATION_CLASS_NAME
+      );
+      if (existingLocationNode) {
+        console.warn("This timeblock has already had a location added:", existingLocationNode);
+        const truncatedStyle = existingLocationNode.getAttribute("style").replace(animationCssValue, "");
+        existingLocationNode.setAttribute("style", truncatedStyle);
+        setTimeout(() => {
+          existingLocationNode.setAttribute("style", truncatedStyle + animationCssValue);
+        }, 50);
         return;
       }
       const currentCourseInfoNode = timeBlock.querySelector(".nonmobile");
@@ -76,7 +85,7 @@
       if (courseInfo.courseLocation === "Online")
         return;
       const newSpan = document.createElement("span");
-      newSpan.setAttribute("style", "display: block;");
+      newSpan.setAttribute("style", `display: block; ${animationCssValue}`);
       newSpan.innerText = courseInfo.courseLocation;
       newSpan.classList.add(LOCATION_CLASS_NAME);
       currentCourseInfoNode.append(newSpan);
