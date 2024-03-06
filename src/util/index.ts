@@ -1,5 +1,8 @@
-export function $node<T extends HTMLElement = HTMLElement>(selector: string): T | null {
-  return document.querySelector<T>(selector);
+export function $node<T extends HTMLElement = HTMLElement>(
+  selector: string,
+  rootNode: HTMLElement | Document = document
+): T | null {
+  return rootNode.querySelector<T>(selector);
 }
 
 export function $safeFind<T extends HTMLElement = HTMLElement>(selector: string): T {
