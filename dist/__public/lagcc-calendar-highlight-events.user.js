@@ -13,46 +13,50 @@
   factory();
 })((function () { 'use strict';
 
-  const DANGER_CSS_CLASS = "mm-bg-danger";
-  const WARNING_CSS_CLASS = "mm-bg-warning";
-  const GREEN_CSS_CLASS = "mm-bg-green";
   const DISABLED_CSS_CLASS = "mm-bg-disabled";
-  const NEW_STYLES1 = `
-.${DANGER_CSS_CLASS} {
-  background-color: #ff00004a;
-}
-.${WARNING_CSS_CLASS} {
-  background-color: #ffae0063;
-}
-.${GREEN_CSS_CLASS} {
-  background-color: #0291024a;
-}
-.${DISABLED_CSS_CLASS} {
-  background-color: unset !important;
-}
-.visually-hidden {
-  display: none !important;
-}
-.session-header:hover {
-  cursor: pointer;
-}
-`;
-  const RED_HIGHLIGHT_KEYWORDS = ["college closed", "no classes scheduled", /\brecess *$/i];
-  const YELLOW_HIGHLIGHT_KEYWORDS = ["irregular day"];
-  const GREEN_HIGHLIGHT_KEYWORDS = [/last day of \w+ classes/gi, /first day of( \w+){1,4}/gi];
+  const GLOBAL_STYLES = `
+  .${DISABLED_CSS_CLASS} {
+    background-color: unset !important;
+  }
+  .visually-hidden {
+    display: none !important;
+  }
+  .session-header:hover {
+    cursor: pointer;
+  }
+`.trim();
+  const EVENT_STYLE_RULES = [
+    {
+      className: "mm-bg-danger",
+      cssProperties: "background-color: #ff00004a; ",
+      keywordTargets: ["college closed", "no classes scheduled", /\brecess *$/i]
+    },
+    {
+      className: "mm-bg-warning",
+      cssProperties: "background-color: #ffae0063; ",
+      keywordTargets: ["irregular day"]
+    },
+    {
+      className: "mm-bg-green",
+      cssProperties: "background-color: #0291024a; ",
+      keywordTargets: [/last day of \w+ classes/gi, /first day of( \w+){1,4}/gi]
+    }
+  ];
   function main() {
-    addCustomStyle(NEW_STYLES1);
+    addStyles();
+    highlightEvents();
     listenForClicks();
-    console.log("Begin: Highlighting all stuff");
-    highlightRowByKeywords(RED_HIGHLIGHT_KEYWORDS, DANGER_CSS_CLASS);
-    highlightRowByKeywords(YELLOW_HIGHLIGHT_KEYWORDS, WARNING_CSS_CLASS);
-    highlightRowByKeywords(GREEN_HIGHLIGHT_KEYWORDS, GREEN_CSS_CLASS);
-    console.log("End: Highlighting all stuff");
-    document.querySelectorAll(".session-header").forEach((elm) => {
-      elm.title = "Click to Hide/Show";
-      elm.addEventListener("click", () => {
-        elm.nextElementSibling.classList.toggle("visually-hidden");
-      });
+  }
+  function highlightEvents() {
+    const tdNodes = document.querySelectorAll("td");
+    EVENT_STYLE_RULES.forEach((event) => {
+      for (const tdNode of tdNodes) {
+        if (event.keywordTargets.some(
+          (keywordSubstr) => isMatchStringOrRegex(tdNode.innerText.toLowerCase(), keywordSubstr)
+        )) {
+          tdNode.closest("tr").classList.add(event.className);
+        }
+      }
     });
   }
   function listenForClicks() {
@@ -63,25 +67,28 @@
       }
       closestTableRow.classList.toggle("mm-bg-disabled");
     });
-  }
-  function highlightRowByKeywords(keywords, className) {
-    const tdNodes = document.querySelectorAll("td");
-    for (const tdNode of tdNodes) {
-      if (keywords.some(
-        (keywordSubstr) => isMatchStringOrRegex(tdNode.innerText.toLowerCase(), keywordSubstr)
-      )) {
-        tdNode.closest("tr").classList.add(className);
-      }
-    }
+    document.querySelectorAll(".session-header").forEach((elm) => {
+      elm.title = "Click to Hide/Show";
+      elm.addEventListener("click", () => {
+        elm.nextElementSibling.classList.toggle("visually-hidden");
+      });
+    });
   }
   function isMatchStringOrRegex(referenceString, targetStringRegexp) {
     return targetStringRegexp instanceof RegExp ? targetStringRegexp.exec(referenceString) !== null : referenceString.includes(targetStringRegexp);
   }
-  function addCustomStyle(cssStr) {
+  function addStyles() {
+    let stylesFinal = GLOBAL_STYLES;
+    EVENT_STYLE_RULES.forEach((rule) => {
+      stylesFinal += `
+     .${rule.className} {
+        ${rule.cssProperties}
+     } 
+    `.trim();
+    });
     const newStylesheet = document.createElement("style");
     newStylesheet.classList.add("mm_stylesheet");
-    newStylesheet.type = "text/css";
-    newStylesheet.innerHTML = cssStr;
+    newStylesheet.innerHTML = stylesFinal;
     document.head.append(newStylesheet);
   }
   setTimeout(main, 2e3);
