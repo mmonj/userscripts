@@ -13,8 +13,8 @@ type TStyleProperty = {
   cssProperties: string;
   keywordTargets: (string | RegExp)[];
 };
-const DISABLED_CSS_CLASS = "mm-bg-disabled";
 
+const DISABLED_CSS_CLASS = "mm-bg-disabled";
 const GLOBAL_STYLES = `
   .${DISABLED_CSS_CLASS} {
     background-color: unset !important;
@@ -53,15 +53,21 @@ function main(): void {
 }
 
 function highlightEvents(): void {
-  const tdNodes = document.querySelectorAll("td");
+  const trNodes = document.querySelectorAll<HTMLElement>(".elementor-widget-container tbody tr");
   EVENT_STYLE_RULES.forEach((event) => {
-    for (const tdNode of tdNodes) {
+    for (const trNode of trNodes) {
+      const descriptionElement = [...trNode.children].at(-1) as HTMLElement | undefined;
+      if (descriptionElement === undefined) {
+        console.log("Description element does not exist for", trNode);
+        continue;
+      }
+
       if (
         event.keywordTargets.some((keywordSubstr) =>
-          isMatchStringOrRegex(tdNode.innerText.toLowerCase(), keywordSubstr)
+          isMatchStringOrRegex(descriptionElement.innerText.toLowerCase(), keywordSubstr)
         )
       ) {
-        tdNode.closest("tr")!.classList.add(event.className);
+        descriptionElement.closest("tr")!.classList.add(event.className);
       }
     }
   });

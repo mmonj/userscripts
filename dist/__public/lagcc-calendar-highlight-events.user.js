@@ -48,13 +48,18 @@
     listenForClicks();
   }
   function highlightEvents() {
-    const tdNodes = document.querySelectorAll("td");
+    const trNodes = document.querySelectorAll(".elementor-widget-container tbody tr");
     EVENT_STYLE_RULES.forEach((event) => {
-      for (const tdNode of tdNodes) {
+      for (const trNode of trNodes) {
+        const descriptionElement = [...trNode.children].at(-1);
+        if (descriptionElement === void 0) {
+          console.log("Description element does not exist for", trNode);
+          continue;
+        }
         if (event.keywordTargets.some(
-          (keywordSubstr) => isMatchStringOrRegex(tdNode.innerText.toLowerCase(), keywordSubstr)
+          (keywordSubstr) => isMatchStringOrRegex(descriptionElement.innerText.toLowerCase(), keywordSubstr)
         )) {
-          tdNode.closest("tr").classList.add(event.className);
+          descriptionElement.closest("tr").classList.add(event.className);
         }
       }
     });
